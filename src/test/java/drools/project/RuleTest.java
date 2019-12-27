@@ -17,6 +17,7 @@ package drools.project;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.kie.api.KieBase;
@@ -55,6 +56,18 @@ public class RuleTest {
 
         LOG.info("Creating kieSession");
         KieSession session = kieBase.newKieSession();
+        long valor = session.getSessionClock().getCurrentTime();
+        System.out.println("Time before begin: " + valor);
+        System.out.println(
+        		String.format("%02d min, %02d sec", 
+                	    TimeUnit.MILLISECONDS.toMinutes(valor),
+                	    TimeUnit.MILLISECONDS.toSeconds(valor) - 
+                	    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(valor))
+                	)
+        		);
+        session.addEventListener(new EventListener());
+        session.addEventListener(new EventListener2());
+        session.addEventListener(new RuleRuntime());
 
         LOG.info("Populating globals");
         Set<String> check = new HashSet<String>();
@@ -88,7 +101,7 @@ public class RuleTest {
 		
         session.insert(new Testcheck());
         session.insert(new Helper());
-        session.addEventListener(new EventListener());
+
         session.fireAllRules();
 
         LOG.info("Final checks");

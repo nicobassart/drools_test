@@ -1,6 +1,8 @@
 package drools.project;
 
 
+import java.util.concurrent.TimeUnit;
+
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.AgendaGroupPoppedEvent;
@@ -14,8 +16,18 @@ import org.kie.api.event.rule.RuleFlowGroupDeactivatedEvent;
 public class EventListener implements AgendaEventListener {
 
 	@Override
+	public void matchCreated(MatchCreatedEvent arg0) {
+		System.out.println("Match Created Rule: " + arg0.getMatch().getRule().getName()  + " Time: " + arg0.getKieRuntime().getSessionClock().getCurrentTime());
+	}
+
+	@Override
+	public void beforeMatchFired(BeforeMatchFiredEvent arg0) {
+		System.out.println("Before Match Rule: " + arg0.getMatch().getRule().getName()  + " Time: " +  arg0.getKieRuntime().getSessionClock().getCurrentTime());
+	}
+
+	@Override
 	public void afterMatchFired(AfterMatchFiredEvent arg0) {
-		System.out.println("afterMatchFired");
+		System.out.println("After Match Rule: " + arg0.getMatch().getRule().getName()  + " Time: " +  arg0.getKieRuntime().getSessionClock().getCurrentTime());
 	}
 
 	@Override
@@ -24,6 +36,8 @@ public class EventListener implements AgendaEventListener {
 		
 	}
 
+	
+	
 	@Override
 	public void afterRuleFlowGroupDeactivated(RuleFlowGroupDeactivatedEvent arg0) {
 		System.out.println("afterRuleFlowGroupDeactivated");
@@ -40,10 +54,7 @@ public class EventListener implements AgendaEventListener {
 		System.out.println("agendaGroupPushed");
 	}
 
-	@Override
-	public void beforeMatchFired(BeforeMatchFiredEvent arg0) {
-		System.out.println("beforeMatchFired");
-	}
+
 
 	@Override
 	public void beforeRuleFlowGroupActivated(RuleFlowGroupActivatedEvent arg0) {
@@ -60,9 +71,5 @@ public class EventListener implements AgendaEventListener {
 		System.out.println("matchCancelled");
 	}
 
-	@Override
-	public void matchCreated(MatchCreatedEvent arg0) {
-		System.out.println("matchCreated "+ arg0.getMatch().getRule().getName());
-	}
 
 }

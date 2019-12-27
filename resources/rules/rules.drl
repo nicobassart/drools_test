@@ -15,65 +15,35 @@ import java.util.concurrent.TimeUnit;
 global java.util.Set pito;
 global drools.project.Helper helper;
 
-query queryPrueba(Measurement $a)
-		$a:=Measurement( id  == "pez");
-end
-query queryPruebac(Measurement $b)
-		$b:=Measurement( id  == "foca");
-end
-
-/*	Se ejecuta dos veces el then con cada par de valores que hacen verdad las querys.
-*/
-rule "query prueba 1"
-no-loop
-when
-	queryPrueba($total;)
-	queryPruebac($total1;)
-then
-	System.out.println("Test1: tatal1: " + $total + " Total2: "+ $total1);
-end
-
-query queryPrueba2(Set $a)
-	$a:=java.util.Set() from accumulate( 
-		$b:Measurement( id  == "pez");
-		collectSet($b)
-	)
-end
-
-query queryPrueba2c(Set $a)
-	$a:=java.util.Set() from accumulate( 
-		$b:Measurement( id  == "foca");
-		collectSet($b)
-	)
-end
-
-rule "query prueba 2"
-no-loop
-when
-	queryPrueba2($total;)
-	queryPrueba2c($total1;)
-	$helper: Pruebas(hash.addAll($total1),hash.addAll($total))
-then
-	System.out.println("Test2: total1 " + $helper.getHash());
-end
-
-
-
-query queryPrueba4c(Measurement $a)
-	$a:= Measurement( id  == "foca");
-end
 
 query queryPrueba5c()
 	Measurement( id  == "pez");
+	Testcheck(check())
 end
 
-rule "query prueba 3"
+// Fired the activation here
+rule "Rule 1"
 	no-loop
 when
 	Testcheck(setBefore(LocalDateTime.now()))
 	queryPrueba5c()
 	$test: Testcheck(setAfter( LocalDateTime.now()))
 then
+	// Before Match Fired began here.
+
 	TimeUnit.SECONDS.sleep(10);
-	System.out.println("Test2: total1xx " + $test.diferencia());
+	System.out.println("Test2: XXXX");
+
+	// After Match Fired began here.
+end
+
+// Fired the activation here
+rule "Rule 2"
+	no-loop
+when
+	Measurement(id=="foca")
+then
+	// Before Match Fired began here.
+	System.out.println("Ingreso Foca");
+	// After Match Fired began here.
 end

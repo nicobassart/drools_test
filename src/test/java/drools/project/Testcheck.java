@@ -2,6 +2,7 @@ package drools.project;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 public class Testcheck {
 	private LocalDateTime before;
@@ -10,11 +11,17 @@ public class Testcheck {
 	public LocalDateTime getBefore() {
 		return before;
 	}
-	public boolean setBefore(LocalDateTime before) {
+	public boolean setBefore(LocalDateTime before) throws InterruptedException {
 		this.before = before;
+		TimeUnit.SECONDS.sleep(10);
 		System.out.println("Before");
 		return true;
 	}
+	public boolean check() {
+		System.out.println("passing query");
+		return true;
+	}
+	
 	public LocalDateTime getAfter() {
 		return after;
 	}
